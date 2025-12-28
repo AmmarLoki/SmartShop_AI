@@ -5,6 +5,7 @@ Provides FastAPI dependency injection setup for services, repositories, and util
 """
 
 from typing import Generator
+from fastapi import Depends
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.cache.redis_client import RedisClient, get_redis_client
@@ -21,7 +22,7 @@ from app.ml.summarizer import Summarizer
 
 
 # Repository Dependencies
-def get_product_repository(db: Session = get_db()) -> ProductRepository:
+def get_product_repository(db: Session = Depends(get_db)) -> ProductRepository:
     """Get product repository instance"""
     return ProductRepository(db)
 
@@ -54,12 +55,12 @@ def get_summarizer() -> Summarizer:
 
 # Service Dependencies
 def get_search_service(
-    db: Session = get_db(),
-    redis: RedisClient = get_redis_client(),
-    query_parser: QueryParser = get_query_parser(),
-    embedding_gen: EmbeddingGenerator = get_embedding_generator(),
-    similarity_engine: SimilarityEngine = get_similarity_engine(),
-    ranking_engine: RankingEngine = get_ranking_engine()
+    db: Session = Depends(get_db),
+    redis: RedisClient = Depends(get_redis_client),
+    query_parser: QueryParser = Depends(get_query_parser),
+    embedding_gen: EmbeddingGenerator = Depends(get_embedding_generator),
+    similarity_engine: SimilarityEngine = Depends(get_similarity_engine),
+    ranking_engine: RankingEngine = Depends(get_ranking_engine)
 ) -> SearchService:
     """Get search service instance with all dependencies"""
     return SearchService(
@@ -73,17 +74,17 @@ def get_search_service(
 
 
 def get_comparison_service(
-    db: Session = get_db(),
-    redis: RedisClient = get_redis_client()
+    db: Session = Depends(get_db),
+    redis: RedisClient = Depends(get_redis_client)
 ) -> ComparisonService:
     """Get comparison service instance"""
     return ComparisonService(db=db, redis=redis)
 
 
 def get_recommendation_service(
-    db: Session = get_db(),
-    similarity_engine: SimilarityEngine = get_similarity_engine(),
-    ranking_engine: RankingEngine = get_ranking_engine()
+    db: Session = Depends(get_db),
+    similarity_engine: SimilarityEngine = Depends(get_similarity_engine),
+    ranking_engine: RankingEngine = Depends(get_ranking_engine)
 ) -> RecommendationService:
     """Get recommendation service instance"""
     return RecommendationService(
@@ -94,7 +95,7 @@ def get_recommendation_service(
 
 
 def get_aggregation_service(
-    redis: RedisClient = get_redis_client()
+    redis: RedisClient = Depends(get_redis_client)
 ) -> AggregationService:
     """Get aggregation service instance"""
     return AggregationService(redis=redis)

@@ -4,7 +4,7 @@ SmartShop AI Backend - Comparison Schemas
 Pydantic models for product comparison request/response validation
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 from typing import List, Dict, Any, Optional
 
 
@@ -20,9 +20,9 @@ class ComparisonRequest(BaseModel):
         }
 
 
-class ComparisonData(BaseModel):
+class ComparisonData(RootModel):
     """Comparison data for a specific attribute"""
-    __root__: Dict[str, Any]  # Product name -> value mapping
+    root: Dict[str, Any]  # Product name -> value mapping
 
 
 class ComparisonResponse(BaseModel):

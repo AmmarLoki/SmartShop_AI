@@ -1,0 +1,14 @@
+export const APP_CONSTANTS = {
+    MAX_COMPARISON_ITEMS: 4,
+    DEFAULT_PAGE_SIZE: 10,
+    CURRENCY_SYMBOL: '$',
+    APP_NAME: 'SmartShop AI',
+};
+
+export const HTTP_STATUS = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    NOT_FOUND: 404,
+    INTERNAL_SERVER_ERROR: 500,
+};
